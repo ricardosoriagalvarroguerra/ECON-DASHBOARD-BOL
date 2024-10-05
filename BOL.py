@@ -5,7 +5,7 @@ import pandas as pd
 # Función para cargar la base de datos con caché
 @st.cache_data
 def cargar_datos():
-    file_path = 'BOL-BDD.xlsx'  # Ruta correcta del archivo cargado
+    file_path = '/mnt/data/BOL-BDD.xlsx'  # Ruta correcta del archivo cargado
     return pd.read_excel(file_path, sheet_name='diario')
 
 # Configuración de la página
@@ -21,6 +21,9 @@ st.markdown("""
     [data-testid="stSidebar"] {
         background-color: none;
         box-shadow: none;
+    }
+    .metric .delta {
+        color: white !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -65,8 +68,17 @@ if page == "General":
         ultimo_valor_paralelo = ultimo_dato['paralelo']
         fecha_ultimo_dato = ultimo_dato['date']
         
+        # Obtener el valor anterior para calcular la diferencia
+        if len(diaria_data) > 1:
+            valor_anterior_paralelo = diaria_data.iloc[-2]['paralelo']
+            delta = ultimo_valor_paralelo - valor_anterior_paralelo
+            delta_direction = "up" if delta > 0 else "down"
+        else:
+            delta = 0
+            delta_direction = "up"
+        
         # Mostrar una tarjeta métrica con el último valor de 'paralelo' y la fecha correspondiente
-        st.metric(label="Tipo de Cambio Paralelo", value=f"{ultimo_valor_paralelo}", delta=f"Última fecha: {fecha_ultimo_dato.date()}")
+        st.metric(label="Tipo de Cambio Paralelo", value=f"{ultimo_valor_paralelo}", delta=f"Última fecha: {fecha_ultimo_dato.date()}", delta_color=delta_direction)
     else:
         st.write("No hay datos disponibles para mostrar.")
 
