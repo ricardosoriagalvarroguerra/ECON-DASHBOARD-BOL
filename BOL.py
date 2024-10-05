@@ -69,6 +69,7 @@ if page == "General":
     if not diaria_data.empty:
         ultimo_dato = diaria_data.iloc[-1]
         ultimo_valor_paralelo = ultimo_dato['paralelo']
+        fecha_ultimo_dato = ultimo_dato['date']
         
         if len(diaria_data) > 1:
             valor_anterior_paralelo = diaria_data.iloc[-2]['paralelo']
@@ -82,6 +83,9 @@ if page == "General":
             value=f"{ultimo_valor_paralelo:.2f}",  # Reducir el tamaño del valor mostrado
             delta=f"{delta:.2f}"
         )
+        
+        # Mostrar la fecha del último dato debajo de la tarjeta métrica
+        st.write(f"Fecha del último dato: {fecha_ultimo_dato.date()}")
     else:
         st.write("No hay datos disponibles para mostrar.")
 
