@@ -39,13 +39,18 @@ with st.sidebar:
         }
     )
 
+# Función para cargar la base de datos con caché
+@st.cache_data
+def cargar_datos():
+    file_path = 'BOL-BDD.xlsx'  # Ruta del archivo cargado
+    return pd.read_excel(file_path, sheet_name='diario')
+
 # Contenido de las páginas con título personalizado y más pequeño
 if page == "General":
     st.markdown("<h1 style='text-align: left; margin-top: -50px; font-size: 25px;'>General</h1>", unsafe_allow_html=True)
     
-    # Cargar los datos de la hoja 'diario'
-    file_path = 'BOL-BDD.xlsx'
-    diaria_data = pd.read_excel(file_path, sheet_name='diario')
+    # Cargar los datos de la hoja 'diario' usando la función de caché
+    diaria_data = cargar_datos()
     
     # Obtener el último valor de la variable 'paralelo' y la fecha del último dato
     ultimo_dato = diaria_data.iloc[-1]
