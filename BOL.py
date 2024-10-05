@@ -101,7 +101,7 @@ if page == "General":
                 value=f"{ultimo_valor_paralelo:.2f}",  # Reducir el tamaño del valor mostrado
                 delta=f"{delta:.2f}"
             )
-            st.markdown(f"<div class='metric-card'>Fecha del último dato: {fecha_ultimo_dato_paralelo.date()}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='metric-card'>{fecha_ultimo_dato_paralelo.date()}</div>", unsafe_allow_html=True)
     
     # Obtener el último valor de la inflación (General)
     if not mensual_data.empty:
@@ -115,7 +115,7 @@ if page == "General":
                 label="Inflación General",
                 value=f"{ultimo_valor_general:.2f}"
             )
-            st.markdown(f"<div class='metric-card'>Fecha del último dato de inflación: {fecha_ultimo_dato_mensual.date()}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='metric-card'>{fecha_ultimo_dato_mensual.date()}</div>", unsafe_allow_html=True)
     
     st.markdown("</div>", unsafe_allow_html=True)
 
