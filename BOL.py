@@ -5,10 +5,8 @@ import pandas as pd
 # Función para cargar la base de datos con caché
 @st.cache_data
 def cargar_datos():
-    file_path = 'BOL-BDD.xlsx'  # Ruta del archivo cargado
+    file_path = '/mnt/data/BOL-BDD.xlsx'  # Ruta correcta del archivo cargado
     return pd.read_excel(file_path, sheet_name='diario')
-
-
 
 # Configuración de la página
 st.set_page_config(
@@ -47,12 +45,6 @@ with st.sidebar:
         }
     )
 
-# Función para cargar la base de datos con caché
-@st.cache_data
-def cargar_datos():
-    file_path = 'BOL-BDD.xlsx'  # Ruta del archivo cargado
-    return pd.read_excel(file_path, sheet_name='diario')
-
 # Contenido de las páginas con título personalizado y más pequeño
 if page == "General":
     st.markdown("<h1 style='text-align: left; margin-top: -50px; font-size: 25px;'>General</h1>", unsafe_allow_html=True)
@@ -60,13 +52,23 @@ if page == "General":
     # Cargar los datos de la hoja 'diario' usando la función de caché
     diaria_data = cargar_datos()
     
-    # Obtener el último valor de la variable 'paralelo' y la fecha del último dato
-    ultimo_dato = diaria_data.iloc[-1]
-    ultimo_valor_paralelo = ultimo_dato['paralelo']
-    fecha_ultimo_dato = ultimo_dato['date']
+    # Asegurarse de que la columna 'date' sea de tipo datetime
+    if 'date' in diaria_data.columns:
+        diaria_data['date'] = pd.to_datetime(diaria_data['date'], errors='coerce')
     
-    # Mostrar una tarjeta métrica con el último valor de 'paralelo' y la fecha correspondiente
-    st.metric(label="Tipo de Cambio Paralelo", value=f"{ultimo_valor_paralelo}", delta=f"Última fecha: {fecha_ultimo_dato}")
+    # Eliminar filas con valores nulos en 'paralelo' o 'date'
+    diaria_data = diaria_data.dropna(subset=['paralelo', 'date'])
+    
+    # Obtener el último valor de la variable 'paralelo' y la fecha del último dato
+    if not diaria_data.empty:
+        ultimo_dato = diaria_data.iloc[-1]
+        ultimo_valor_paralelo = ultimo_dato['paralelo']
+        fecha_ultimo_dato = ultimo_dato['date']
+        
+        # Mostrar una tarjeta métrica con el último valor de 'paralelo' y la fecha correspondiente
+        st.metric(label="Tipo de Cambio Paralelo", value=f"{ultimo_valor_paralelo}", delta=f"Última fecha: {fecha_ultimo_dato.date()}")
+    else:
+        st.write("No hay datos disponibles para mostrar.")
 
 elif page == "Sector Real":
     st.markdown("<h1 style='text-align: left; margin-top: -50px; font-size: 25px;'>Sector Real</h1>", unsafe_allow_html=True)
