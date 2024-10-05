@@ -32,7 +32,8 @@ st.markdown("""
         display: flex;
         gap: 40px;
         justify-content: flex-start;
-        align-items: center;
+        align-items: flex-start;
+        flex-wrap: nowrap;
         margin-top: 20px;
     }
     .metric-card {
