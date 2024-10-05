@@ -72,10 +72,10 @@ if page == "General":
         if len(diaria_data) > 1:
             valor_anterior_paralelo = diaria_data.iloc[-2]['paralelo']
             delta = ultimo_valor_paralelo - valor_anterior_paralelo
-            delta_direction = "up" if delta > 0 else "down"
+            delta_direction = "normal" if delta >= 0 else "inverse"
         else:
             delta = 0
-            delta_direction = "up"
+            delta_direction = "normal"
         
         # Mostrar una tarjeta métrica con el último valor de 'paralelo' y la fecha correspondiente
         st.metric(label="Tipo de Cambio Paralelo", value=f"{ultimo_valor_paralelo}", delta=f"Última fecha: {fecha_ultimo_dato.date()}", delta_color=delta_direction)
