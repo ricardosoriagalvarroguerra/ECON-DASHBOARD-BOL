@@ -85,7 +85,7 @@ if page == "General":
         )
         
         # Mostrar la fecha del último dato debajo de la tarjeta métrica
-        st.write(f"Fecha del último dato: {fecha_ultimo_dato.date()}")
+        st.write(f"{fecha_ultimo_dato.date()}")
     else:
         st.write("No hay datos disponibles para mostrar.")
 
