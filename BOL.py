@@ -29,10 +29,8 @@ st.markdown("""
         font-size: 20px !important;
     }
     .metric-container {
-        display: flex;
-        gap: 40px;
-        justify-content: flex-start;
-        align-items: flex-start;
+        display: block;
+        gap: 20px;
         margin-top: 20px;
     }
     .metric-card {
@@ -81,7 +79,7 @@ if page == "General":
     diaria_data = diaria_data.dropna(subset=['paralelo', 'date'])
     mensual_data = mensual_data.dropna(subset=['General', 'date_ipc'])
     
-    # Mostrar tarjetas métricas una al lado de la otra, de manera horizontal
+    # Mostrar tarjetas métricas una debajo de la otra, de manera vertical
     st.markdown("<div class='metric-container'>", unsafe_allow_html=True)
     
     # Obtener el último valor de la variable 'paralelo' y el valor anterior para calcular la diferencia
@@ -96,12 +94,14 @@ if page == "General":
         else:
             delta = 0
         
-        st.metric(
-            label="Tipo de Cambio Paralelo",
-            value=f"{ultimo_valor_paralelo:.2f}",  # Reducir el tamaño del valor mostrado
-            delta=f"{delta:.2f}"
-        )
-        st.markdown(f"<div class='metric-card'>Fecha del último dato: {fecha_ultimo_dato_paralelo.date()}</div>", unsafe_allow_html=True)
+        col1, col2 = st.columns(2)
+        with col1:
+            st.metric(
+                label="Tipo de Cambio Paralelo",
+                value=f"{ultimo_valor_paralelo:.2f}",  # Reducir el tamaño del valor mostrado
+                delta=f"{delta:.2f}"
+            )
+            st.markdown(f"<div class='metric-card'>Fecha del último dato: {fecha_ultimo_dato_paralelo.date()}</div>", unsafe_allow_html=True)
     
     # Obtener el último valor de la inflación (General)
     if not mensual_data.empty:
@@ -110,11 +110,12 @@ if page == "General":
         fecha_ultimo_dato_mensual = ultimo_dato_mensual['date_ipc']
         
         # Mostrar tarjeta métrica de inflación
-        st.metric(
-            label="Inflación General",
-            value=f"{ultimo_valor_general:.2f}"
-        )
-        st.markdown(f"<div class='metric-card'>Fecha del último dato de inflación: {fecha_ultimo_dato_mensual.date()}</div>", unsafe_allow_html=True)
+        with col2:
+            st.metric(
+                label="Inflación General",
+                value=f"{ultimo_valor_general:.2f}"
+            )
+            st.markdown(f"<div class='metric-card'>Fecha del último dato de inflación: {fecha_ultimo_dato_mensual.date()}</div>", unsafe_allow_html=True)
     
     st.markdown("</div>", unsafe_allow_html=True)
 
