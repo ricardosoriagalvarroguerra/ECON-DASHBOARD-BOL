@@ -1,7 +1,7 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
 import pandas as pd
-import matplotlib.pyplot as plt
+import plotly.express as px
 from io import BytesIO
 
 # Función para cargar la base de datos con caché
@@ -105,14 +105,12 @@ if page == "General":
             )
             st.markdown(f"<div class='metric-card'>{fecha_ultimo_dato_paralelo.date()}</div>", unsafe_allow_html=True)
             
-            # Agregar mini gráfico de la serie completa
-            fig, ax = plt.subplots(figsize=(4, 1))
-            ax.plot(diaria_data['date'], diaria_data['paralelo'], color='blue', linewidth=1)
-            ax.set_axis_off()
-            buffer = BytesIO()
-            plt.savefig(buffer, format='png', bbox_inches='tight')
-            buffer.seek(0)
-            st.image(buffer, use_column_width=True)
+            # Agregar mini gráfico de la serie completa con Plotly
+            fig = px.line(diaria_data, x='date', y='paralelo', title='', height=100)
+            fig.update_xaxes(visible=False)
+            fig.update_yaxes(visible=False)
+            fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
+            st.plotly_chart(fig, use_container_width=True)
     
     # Obtener el último valor de la inflación (General)
     if not mensual_data.empty:
@@ -128,14 +126,12 @@ if page == "General":
             )
             st.markdown(f"<div class='metric-card'>{fecha_ultimo_dato_mensual.date()}</div>", unsafe_allow_html=True)
             
-            # Agregar mini gráfico de la serie completa
-            fig, ax = plt.subplots(figsize=(4, 1))
-            ax.plot(mensual_data['date_ipc'], mensual_data['General'], color='green', linewidth=1)
-            ax.set_axis_off()
-            buffer = BytesIO()
-            plt.savefig(buffer, format='png', bbox_inches='tight')
-            buffer.seek(0)
-            st.image(buffer, use_column_width=True)
+            # Agregar mini gráfico de la serie completa con Plotly
+            fig = px.line(mensual_data, x='date_ipc', y='General', title='', height=100)
+            fig.update_xaxes(visible=False)
+            fig.update_yaxes(visible=False)
+            fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
+            st.plotly_chart(fig, use_container_width=True)
     
     st.markdown("</div>", unsafe_allow_html=True)
 
