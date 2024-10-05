@@ -6,7 +6,7 @@ import pandas as pd
 @st.cache_data
 def cargar_datos():
     file_path = 'BOL-BDD.xlsx'  # Ruta correcta del archivo cargado
-    return pd.read_excel(file_path, sheet_name='diario')
+    return pd.read_excel(file_path, sheet_name=None)  # Cargar todas las hojas
 
 # Configuración de la página
 st.set_page_config(
@@ -27,6 +27,10 @@ st.markdown("""
     }
     .small-metric .css-1v3fvcr {
         font-size: 20px !important;
+    }
+    .metric-container {
+        display: flex;
+        gap: 20px;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -55,21 +59,25 @@ with st.sidebar:
 if page == "General":
     st.markdown("<h1 style='text-align: left; margin-top: -50px; font-size: 25px;'>General</h1>", unsafe_allow_html=True)
     
-    # Cargar los datos de la hoja 'diario' usando la función de caché
-    diaria_data = cargar_datos()
+    # Cargar los datos de todas las hojas usando la función de caché
+    data = cargar_datos()
+    diaria_data = data['diario']
+    mensual_data = data['mensual']
     
     # Asegurarse de que la columna 'date' sea de tipo datetime
     if 'date' in diaria_data.columns:
         diaria_data['date'] = pd.to_datetime(diaria_data['date'], errors='coerce')
+    if 'date_ipc' in mensual_data.columns:
+        mensual_data['date_ipc'] = pd.to_datetime(mensual_data['date_ipc'], errors='coerce')
     
     # Eliminar filas con valores nulos en 'paralelo' o 'date'
     diaria_data = diaria_data.dropna(subset=['paralelo', 'date'])
+    mensual_data = mensual_data.dropna(subset=['General', 'date_ipc'])
     
     # Obtener el último valor de la variable 'paralelo' y el valor anterior para calcular la diferencia
     if not diaria_data.empty:
         ultimo_dato = diaria_data.iloc[-1]
         ultimo_valor_paralelo = ultimo_dato['paralelo']
-        fecha_ultimo_dato = ultimo_dato['date']
         
         if len(diaria_data) > 1:
             valor_anterior_paralelo = diaria_data.iloc[-2]['paralelo']
@@ -77,17 +85,25 @@ if page == "General":
         else:
             delta = 0
         
-        # Mostrar una tarjeta métrica con el último valor de 'paralelo' y la diferencia con el valor anterior
+        # Mostrar tarjetas métricas una al lado de la otra
+        st.markdown("<div class='metric-container'>", unsafe_allow_html=True)
         st.metric(
             label="Tipo de Cambio Paralelo",
             value=f"{ultimo_valor_paralelo:.2f}",  # Reducir el tamaño del valor mostrado
             delta=f"{delta:.2f}"
         )
         
-        # Mostrar la fecha del último dato debajo de la tarjeta métrica
-        st.write(f"{fecha_ultimo_dato.date()}")
-    else:
-        st.write("No hay datos disponibles para mostrar.")
+        # Obtener el último valor de la inflación (General)
+        if not mensual_data.empty:
+            ultimo_dato_mensual = mensual_data.iloc[-1]
+            ultimo_valor_general = ultimo_dato_mensual['General']
+            
+            # Mostrar tarjeta métrica de inflación
+            st.metric(
+                label="Inflación General",
+                value=f"{ultimo_valor_general:.2f}"
+            )
+        st.markdown("</div>", unsafe_allow_html=True)
 
 elif page == "Sector Real":
     st.markdown("<h1 style='text-align: left; margin-top: -50px; font-size: 25px;'>Sector Real</h1>", unsafe_allow_html=True)
