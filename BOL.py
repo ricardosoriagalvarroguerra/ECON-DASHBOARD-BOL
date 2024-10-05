@@ -8,11 +8,11 @@ st.set_page_config(
     layout="wide"
 )
 
-# CSS para hacer el fondo del menú de navegación transparente
+# CSS para hacer el fondo del menú de navegación no transparente
 st.markdown("""
     <style>
     [data-testid="stSidebar"] {
-        background-color: transparent;
+        background-color: #f0f0f0;
         box-shadow: none;
     }
     </style>
