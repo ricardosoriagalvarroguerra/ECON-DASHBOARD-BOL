@@ -29,16 +29,13 @@ st.markdown("""
         font-size: 20px !important;
     }
     .metric-container {
-        display: flex;
-        gap: 40px;
-        justify-content: flex-start;
-        align-items: flex-start;
-        flex-wrap: nowrap;
+        display: block;
         margin-top: 20px;
     }
     .metric-card {
         font-size: 14px !important;
         margin-top: -10px;
+        margin-bottom: 20px;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -82,7 +79,7 @@ if page == "General":
     diaria_data = diaria_data.dropna(subset=['paralelo', 'date'])
     mensual_data = mensual_data.dropna(subset=['General', 'date_ipc'])
     
-    # Mostrar tarjetas métricas una al lado de la otra, de manera horizontal
+    # Mostrar tarjetas métricas una debajo de la otra, de manera vertical
     st.markdown("<div class='metric-container'>", unsafe_allow_html=True)
     
     # Obtener el último valor de la variable 'paralelo' y el valor anterior para calcular la diferencia
