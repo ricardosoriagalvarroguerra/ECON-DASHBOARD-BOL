@@ -25,6 +25,9 @@ st.markdown("""
     .metric .delta {
         color: white !important;
     }
+    .small-metric .css-1v3fvcr {
+        font-size: 20px !important;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -78,7 +81,12 @@ if page == "General":
             delta_direction = "normal"
         
         # Mostrar una tarjeta métrica con el último valor de 'paralelo' y la fecha correspondiente
-        st.metric(label="Tipo de Cambio Paralelo", value=f"{ultimo_valor_paralelo}", delta=f"Última fecha: {fecha_ultimo_dato.date()}", delta_color=delta_direction)
+        st.metric(
+            label="Tipo de Cambio Paralelo",
+            value=f"{ultimo_valor_paralelo:.2f}",  # Reducir el tamaño del valor mostrado
+            delta=f"Última fecha: {fecha_ultimo_dato.date()}",
+            delta_color=delta_direction
+        )
     else:
         st.write("No hay datos disponibles para mostrar.")
 
