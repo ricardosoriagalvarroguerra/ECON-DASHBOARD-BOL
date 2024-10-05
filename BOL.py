@@ -1,5 +1,6 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
+import pandas as pd
 
 # Configuración de la página
 st.set_page_config(
@@ -41,7 +42,18 @@ with st.sidebar:
 # Contenido de las páginas con título personalizado y más pequeño
 if page == "General":
     st.markdown("<h1 style='text-align: left; margin-top: -50px; font-size: 25px;'>General</h1>", unsafe_allow_html=True)
-    st.write("Contenido de la página General.")
+    
+    # Cargar los datos de la hoja 'diario'
+    file_path = 'BOL-BDD.xlsx'
+    diaria_data = pd.read_excel(file_path, sheet_name='diario')
+    
+    # Obtener el último valor de la variable 'paralelo' y la fecha del último dato
+    ultimo_dato = diaria_data.iloc[-1]
+    ultimo_valor_paralelo = ultimo_dato['paralelo']
+    fecha_ultimo_dato = ultimo_dato['date']
+    
+    # Mostrar una tarjeta métrica con el último valor de 'paralelo' y la fecha correspondiente
+    st.metric(label="Tipo de Cambio Paralelo", value=f"{ultimo_valor_paralelo}", delta=f"Última fecha: {fecha_ultimo_dato}")
 
 elif page == "Sector Real":
     st.markdown("<h1 style='text-align: left; margin-top: -50px; font-size: 25px;'>Sector Real</h1>", unsafe_allow_html=True)
