@@ -65,27 +65,22 @@ if page == "General":
     # Eliminar filas con valores nulos en 'paralelo' o 'date'
     diaria_data = diaria_data.dropna(subset=['paralelo', 'date'])
     
-    # Obtener el último valor de la variable 'paralelo' y la fecha del último dato
+    # Obtener el último valor de la variable 'paralelo' y el valor anterior para calcular la diferencia
     if not diaria_data.empty:
         ultimo_dato = diaria_data.iloc[-1]
         ultimo_valor_paralelo = ultimo_dato['paralelo']
-        fecha_ultimo_dato = ultimo_dato['date']
         
-        # Obtener el valor anterior para calcular la diferencia
         if len(diaria_data) > 1:
             valor_anterior_paralelo = diaria_data.iloc[-2]['paralelo']
             delta = ultimo_valor_paralelo - valor_anterior_paralelo
-            delta_direction = "normal" if delta >= 0 else "inverse"
         else:
             delta = 0
-            delta_direction = "normal"
         
-        # Mostrar una tarjeta métrica con el último valor de 'paralelo' y la fecha correspondiente
+        # Mostrar una tarjeta métrica con el último valor de 'paralelo' y la diferencia con el valor anterior
         st.metric(
             label="Tipo de Cambio Paralelo",
             value=f"{ultimo_valor_paralelo:.2f}",  # Reducir el tamaño del valor mostrado
-            delta=f"Última fecha: {fecha_ultimo_dato.date()}",
-            delta_color=delta_direction
+            delta=f"{delta:.2f}"
         )
     else:
         st.write("No hay datos disponibles para mostrar.")
