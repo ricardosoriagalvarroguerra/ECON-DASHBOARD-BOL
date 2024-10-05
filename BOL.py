@@ -97,7 +97,7 @@ if page == "General":
         col1, col2 = st.columns(2)
         with col1:
             st.metric(
-                label="Tipo de Cambio Paralelo",
+                label="Tc Paralelo",
                 value=f"{ultimo_valor_paralelo:.2f}",  # Reducir el tamaño del valor mostrado
                 delta=f"{delta:.2f}"
             )
@@ -112,7 +112,7 @@ if page == "General":
         # Mostrar tarjeta métrica de inflación
         with col2:
             st.metric(
-                label="Inflación General",
+                label="Inflación",
                 value=f"{ultimo_valor_general:.2f}"
             )
             st.markdown(f"<div class='metric-card'>{fecha_ultimo_dato_mensual.date()}</div>", unsafe_allow_html=True)
