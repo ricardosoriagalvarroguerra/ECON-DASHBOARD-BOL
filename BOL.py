@@ -5,7 +5,7 @@ import pandas as pd
 # Función para cargar la base de datos con caché
 @st.cache_data
 def cargar_datos():
-    file_path = '/mnt/data/BOL-BDD.xlsx'  # Ruta correcta del archivo cargado
+    file_path = 'BOL-BDD.xlsx'  # Ruta correcta del archivo cargado
     return pd.read_excel(file_path, sheet_name='diario')
 
 # Configuración de la página
