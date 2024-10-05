@@ -1,6 +1,8 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
 import pandas as pd
+import matplotlib.pyplot as plt
+from io import BytesIO
 
 # Función para cargar la base de datos con caché
 @st.cache_data
@@ -102,6 +104,15 @@ if page == "General":
                 delta=f"{delta:.2f}"
             )
             st.markdown(f"<div class='metric-card'>{fecha_ultimo_dato_paralelo.date()}</div>", unsafe_allow_html=True)
+            
+            # Agregar mini gráfico de la serie completa
+            fig, ax = plt.subplots(figsize=(4, 1))
+            ax.plot(diaria_data['date'], diaria_data['paralelo'], color='blue', linewidth=1)
+            ax.set_axis_off()
+            buffer = BytesIO()
+            plt.savefig(buffer, format='png', bbox_inches='tight')
+            buffer.seek(0)
+            st.image(buffer, use_column_width=True)
     
     # Obtener el último valor de la inflación (General)
     if not mensual_data.empty:
@@ -116,6 +127,15 @@ if page == "General":
                 value=f"{ultimo_valor_general:.2f}"
             )
             st.markdown(f"<div class='metric-card'>{fecha_ultimo_dato_mensual.date()}</div>", unsafe_allow_html=True)
+            
+            # Agregar mini gráfico de la serie completa
+            fig, ax = plt.subplots(figsize=(4, 1))
+            ax.plot(mensual_data['date_ipc'], mensual_data['General'], color='green', linewidth=1)
+            ax.set_axis_off()
+            buffer = BytesIO()
+            plt.savefig(buffer, format='png', bbox_inches='tight')
+            buffer.seek(0)
+            st.image(buffer, use_column_width=True)
     
     st.markdown("</div>", unsafe_allow_html=True)
 
