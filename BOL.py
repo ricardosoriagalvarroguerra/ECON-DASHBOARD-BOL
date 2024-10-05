@@ -2,6 +2,14 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 import pandas as pd
 
+# Función para cargar la base de datos con caché
+@st.cache_data
+def cargar_datos():
+    file_path = 'BOL-BDD.xlsx'  # Ruta del archivo cargado
+    return pd.read_excel(file_path, sheet_name='diario')
+
+
+
 # Configuración de la página
 st.set_page_config(
     page_title="Bolivia Economic Dashboard",
