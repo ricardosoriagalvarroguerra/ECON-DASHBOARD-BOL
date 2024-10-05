@@ -96,7 +96,7 @@ if page == "General":
         else:
             delta = 0
         
-        col1, col2 = st.columns(2)
+        col1, col2 = st.columns([2, 1])
         with col1:
             st.metric(
                 label="Tc Paralelo",
@@ -104,13 +104,14 @@ if page == "General":
                 delta=f"{delta:.2f}"
             )
             st.markdown(f"<div class='metric-card'>{fecha_ultimo_dato_paralelo.date()}</div>", unsafe_allow_html=True)
-            
+        
+        with col2:
             # Agregar mini gráfico de la serie completa con Plotly
             fig = px.line(diaria_data, x='date', y='paralelo', title='', height=100)
             fig.update_xaxes(visible=False)
             fig.update_yaxes(visible=False)
-            fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
-            st.plotly_chart(fig, use_container_width=True)
+            fig.update_layout(margin=dict(l=0, r=0, t=0, b=0), height=150, width=150)
+            st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
     
     # Obtener el último valor de la inflación (General)
     if not mensual_data.empty:
@@ -119,19 +120,21 @@ if page == "General":
         fecha_ultimo_dato_mensual = ultimo_dato_mensual['date_ipc']
         
         # Mostrar tarjeta métrica de inflación
-        with col2:
+        col3, col4 = st.columns([2, 1])
+        with col3:
             st.metric(
                 label="Inflación",
                 value=f"{ultimo_valor_general:.2f}"
             )
             st.markdown(f"<div class='metric-card'>{fecha_ultimo_dato_mensual.date()}</div>", unsafe_allow_html=True)
-            
+        
+        with col4:
             # Agregar mini gráfico de la serie completa con Plotly
             fig = px.line(mensual_data, x='date_ipc', y='General', title='', height=100)
             fig.update_xaxes(visible=False)
             fig.update_yaxes(visible=False)
-            fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
-            st.plotly_chart(fig, use_container_width=True)
+            fig.update_layout(margin=dict(l=0, r=0, t=0, b=0), height=150, width=150)
+            st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
     
     st.markdown("</div>", unsafe_allow_html=True)
 
